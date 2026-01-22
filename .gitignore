@@ -4,3 +4,6 @@ settings.json
 __pycache__/
 *.pyc
 !demo.png
+scrcpy_ui_main.py
+pyscrcpy-test.py
+install-deps-ubuntu-22.04.sh
