@@ -14,6 +14,7 @@ import os
 
 setting_file = "settings.json"
 imageWindowGeometry = "800x800"
+
 # create interface
 root = tk.Tk()
 root.title("Image Editor")
@@ -94,7 +95,7 @@ image_label.pack()
 from PIL import Image, ImageTk
 
 # create function to update image
-def update_image(input_file:str):
+def update_image_base(cv2_image):
     # get values from sliders
     crop_value = crop_slider.get() # 0 - 100
     rotate_value = rotate_slider.get() # 0 - 360
@@ -105,8 +106,7 @@ def update_image(input_file:str):
     # print("rotate_value: ", rotate_value)
     # print("zoom_value: ", zoom_value)
     # print("mirror_value: ", mirror_value)
-    # load image
-    image = cv2.imread(input_file)
+    image = cv2_image
 
     b,g,r = cv2.split(image)
     image = cv2.merge((r,g,b))
@@ -165,22 +165,47 @@ def update_image(input_file:str):
     image_label.image = imgtk
     image_label.pack()
 
-# update image periodically, every 100ms
+def static_update_image():
+    input_file = "demo.png"
+    # load image
+    image = cv2.imread(input_file)
+    # print("Input image type:", type(image)) # <class 'numpy.ndarray'>
+    # print("Input image shape:", image.shape) # (360, 339, 3)
+    update_image_base(image)
+
+from fetch_image_from_scrcpy import select_first_device_and_apply_frame_callback
+import numpy as np
+
+def scrcpy_update_image_thread():
+    # TODO: only update image per 100ms
+    def on_frame(frame:np.ndarray):
+        if not type(frame) == np.ndarray: return
+        if not len(frame.shape) == 3: return
+        if not frame.shape[2] == 3: return
+        # print("New frame received")
+        update_image_base(frame)
+    select_first_device_and_apply_frame_callback(on_frame)
+
 import time
 import threading
 
-def update_image_thread():
-    input_file = "Samsung-Galaxy-device-settings-2.png"
+def static_update_image_thread():
+    """update image periodically, every 100ms"""
     while True:
         try:
-            update_image(input_file)
+            static_update_image()
+            # scrcpy_update_image()
         except:
             import traceback
             traceback.print_exc()
             print("Error updating image")
         time.sleep(0.1)
 
-threading.Thread(target=update_image_thread, daemon=True).start()
+threading.Thread(target=scrcpy_update_image_thread, daemon=True).start()
+# threading.Thread(target=static_update_image_thread, daemon=True).start()
+
+# scrcpy_update_image_thread()
 
 # main loop
 root.mainloop()
+# threading.Thread(root.mainloop, daemon=True).start()
