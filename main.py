@@ -101,10 +101,10 @@ def update_image(input_file:str):
     zoom_value = zoom_slider.get() # 0 - 100
     mirror_value = mirror_button["text"] == "Unmirror"
 
-    print("crop_value: ", crop_value)
-    print("rotate_value: ", rotate_value)
-    print("zoom_value: ", zoom_value)
-    print("mirror_value: ", mirror_value)
+    # print("crop_value: ", crop_value)
+    # print("rotate_value: ", rotate_value)
+    # print("zoom_value: ", zoom_value)
+    # print("mirror_value: ", mirror_value)
     # load image
     image = cv2.imread(input_file)
 

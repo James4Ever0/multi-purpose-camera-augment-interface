@@ -1,5 +1,7 @@
 # Install: pip install pyscrcpy
 # need py3.7 instead?
+# better install from github, the latest version is not on pypi
+# https://github.com/yixinNB/pyscrcpy
 
 import pyscrcpy
 import cv2
@@ -48,3 +50,6 @@ while True:
 
 capture.stop()
 cv2.destroyAllWindows()
+
+# try myscrcpy?
+# https://github.com/me2sy/MYScrcpy/blob/main/src/myscrcpy/core/connection.py
