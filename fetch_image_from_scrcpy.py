@@ -3,6 +3,5 @@
 
 # https://github.com/leng-yue/py-scrcpy-client/blob/main/scrcpy_ui/main.py#L78
 
-import pygetwindow as gw
 import cv2
-import numpy as np
+import scrcpy # pip install scrcpy-client
